@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControleBancario.iml" filepath="$PROJECT_DIR$/.idea/modules/ControleBancario.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControleBancario_integrationTest.iml" filepath="$PROJECT_DIR$/.idea/modules/ControleBancario_integrationTest.iml" group="ControleBancario" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControleBancario_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ControleBancario_main.iml" group="ControleBancario" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ControleBancario_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ControleBancario_test.iml" group="ControleBancario" />
+    </modules>
+  </component>
+</project>
