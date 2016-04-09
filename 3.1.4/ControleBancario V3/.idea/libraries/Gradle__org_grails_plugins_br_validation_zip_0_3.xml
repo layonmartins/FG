@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: org.grails.plugins:br-validation:zip:0.3">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/grails/plugins/br-validation/0.3/br-validation-0.3.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
