@@ -53,7 +53,11 @@ class TransacaoController {
     }
 
     def edit(Transacao transacao) {
-        respond transacao
+        if (transacao != null && transacao.contaCliente.id != session.contaCliente.id) {
+            flash.message = message(code: 'springSecurity.denied.message', args: [message(code: 'transacao.label', default: 'Transacao'), transacao.id])
+            redirect action: "index"
+        }
+        respond transacaoInstance
     }
 
     double getValorReal(Transacao transacao) {
@@ -65,9 +69,7 @@ class TransacaoController {
         if (ant == null) {
             ant = 0
         }
-        println ant
         def tipo = transacao.getPersistentValue('tipo')
-        println tipo
         if (tipo == Transacao.DÉBITO) {
             ant = -ant
         }
@@ -89,7 +91,13 @@ class TransacaoController {
         }
 
         def conta = transacao.contaCliente.conta
+
+        println "saldo = " + conta.saldo
+
         conta.saldo += (transacao.getValorReal() - transacao.getValorAnterior())
+
+        println "saldo = " + conta.saldo
+
         transacao.save flush:true
         conta.save flush: true
 
@@ -105,13 +113,22 @@ class TransacaoController {
     @Transactional
     def delete(Transacao transacao) {
 
+        if (transacao.contaCliente.id != session.contaCliente.id) {
+            flash.message = message(code: 'springSecurity.denied.message', args: [message(code: 'transacao.label', default: 'Transacao'), transacao.id])
+            redirect action: "index", method: "GET"
+            return
+        }
+
         if (transacao == null) {
             transactionStatus.setRollbackOnly()
             notFound()
             return
         }
 
+        def conta = transacao.contaCliente.conta;
+        conta.saldo -= transacao.getValorReal()
         transacao.delete flush:true
+        conta.save flush:true
 
         request.withFormat {
             form multipartForm {

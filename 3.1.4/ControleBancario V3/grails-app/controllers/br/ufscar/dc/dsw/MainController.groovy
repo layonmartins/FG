@@ -12,7 +12,6 @@ class MainController {
         def usuario = springSecurityService.getCurrentUser()
         def userName = springSecurityService.authentication.principal.getUsername()
         def authority = usuario.getAuthorities()[0].getAuthority()
-        Usuario.findById(1)
 
         if (authority.equals('ROLE_GERENTE')) {
             def gerente = Gerente.findByUsername(userName)

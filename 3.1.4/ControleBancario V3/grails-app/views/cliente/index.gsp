@@ -34,23 +34,23 @@
 					</tr>
 				</thead>
 				<tbody>
-				<g:each in="${list}" status="i" var="clienteInstance">
+				<g:each in="${list}" status="i" var="cliente">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" controller="${clienteInstance.class}" id="${clienteInstance.id}">${fieldValue(bean: clienteInstance, field: "nome")}</g:link></td>
+						<td><g:link action="show" controller="${cliente.class}" id="${cliente.id}">${fieldValue(bean: cliente, field: "nome")}</g:link></td>
 					
-						<td>${fieldValue(bean: clienteInstance, field: "endereco")}</td>
+						<td>${fieldValue(bean: cliente, field: "endereco")}</td>
 					
-						<td><g:formatDate date="${clienteInstance.dtMoradia}" /></td>
+						<td><g:formatDate date="${cliente.dtMoradia}" /></td>
 					
-						<td>${fieldValue(bean: clienteInstance, field: "status")}</td>
+						<td>${fieldValue(bean: cliente, field: "status")}</td>
 					
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${clienteInstanceCount ?: 0}" />
+				<g:paginate total="${clienteCount ?: 0}" />
 			</div>
 		</div>
 	</body>

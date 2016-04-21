@@ -14,7 +14,7 @@ class ContaController {
 
         def results = Conta.findAllByAgencia(session.agencia, params)
 
-        respond results, model:[list: results, contaInstanceCount: Conta.count()]
+        respond results, model:[list: results, contaCount: Conta.count()]
     }
     
     @Secured(['ROLE_ADMIN', 'ROLE_CLIENTE', 'ROLE_GERENTE'])

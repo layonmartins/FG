@@ -267,7 +267,7 @@ class BootStrap {
         
         println 'relacionando contas x clientes - ok'
         
-	def deposito = new Transacao(contaCliente: contaCli2, caixaEletronico: caixa2, 
+	    def deposito = new Transacao(contaCliente: contaCli2, caixaEletronico: caixa2,
             valor: 50d, data: new Date(), quem: 'Próprio', motivo: 'Depósito',
             tipo: Transacao.CRÉDITO
         )

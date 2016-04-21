@@ -10,7 +10,7 @@ class ClienteController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Cliente.list(params), model:[list: Cliente.list(params), clienteInstanceCount: Cliente.count()]
+        respond Cliente.list(params), model:[list: Cliente.list(params), clienteCount: Cliente.count()]
     }
     
     @Secured(['ROLE_ADMIN', 'ROLE_CLIENTE', 'ROLE_GERENTE'])

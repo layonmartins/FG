@@ -11,7 +11,7 @@ class ContaController {
     
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Conta.list(params), model:[list: Conta.list(params), contaInstanceCount: Conta.count()]
+        respond Conta.list(params), model:[list: Conta.list(params), contaCount: Conta.count()]
     }
     
     @Secured(['ROLE_ADMIN', 'ROLE_CLIENTE', 'ROLE_GERENTE'])
