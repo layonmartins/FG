@@ -54,7 +54,7 @@ class ContaCorrenteController {
 
     def edit(ContaCorrente contaCorrente) {
         if (contaCorrente != null && contaCorrente.agencia.id != session.agencia.id) {
-            flash.message = message(code: 'springSecurity.denied.message', args: [message(code: 'transacaoInstance.label', default: 'Transacao'), contaCorrente.id])
+            flash.message = message(code: 'springSecurity.denied.message', args: [message(code: 'contaCorrente.label', default: 'ContaCorrente'), contaCorrente.id])
             redirect action: "index"
         }
 
@@ -90,7 +90,7 @@ class ContaCorrenteController {
     def delete(ContaCorrente contaCorrente) {
 
         if (contaCorrente.agencia.id != session.agencia.id) {
-            flash.message = message(code: 'springSecurity.denied.message', args: [message(code: 'transacaoInstance.label', default: 'Transacao'), contaCorrente.id])
+            flash.message = message(code: 'springSecurity.denied.message', args: [message(code: 'contaCorrente.label', default: 'ContaCorrente'), contaCorrente.id])
             redirect action: "index"
             return
         }
