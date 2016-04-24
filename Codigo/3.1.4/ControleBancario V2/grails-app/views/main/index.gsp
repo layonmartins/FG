@@ -7,7 +7,7 @@
     <body>
         <div id="status" role="complementary">
 
-            <h1>Opções</h1>
+            <h1>&nbsp;&nbsp;Opções</h1>
             <table>
                 <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
                     <g:set var="name" value="${c.logicalPropertyName}" />
