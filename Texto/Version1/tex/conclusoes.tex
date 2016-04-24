@@ -1,0 +1,176 @@
+\chapter{Considerações finais}\label{conclusoes}
+
+Este  material  apresentou as  principais  funcionalidades  do framework  Grails
+através da  descrição dos aspectos relacionados ao  desenvolvimento da aplicação
+{\bf ControleBancario}.
+
+\vspace{0.2cm}
+\noindent Para finalizar esse material, esse capítulo apresenta o {\it overview}
+de mais algumas funcionalidades presentes  em Grails que não foram abordadas nos
+capítulos anteriores.
+
+\section{Automação de testes}
+
+\vspace{0.5cm}
+
+Essa seção apresenta algumas características de Grails que facilitam a automação
+de  testes. Relembrando:  testes automatizados  te dão  segurança no  momento da
+manutenção. No entanto, antes do início da discussão sobre tais características,
+é fundamental relembrar a diferença entre testes unitários e de integração. 
+
+\vspace{0.5cm}
+\noindent {\bf Testes unitários} levam em consideração a unidade a ser verificada
+isoladamente. Não  há conexões  com bancos  de dados ou  qualquer outro  tipo de
+componente: a unidade  deve ser vista como um elemento  isolado (não se comunica
+com ninguém).
+
+\vspace{0.5cm}
+\noindent {\bf Testes de integração}, por sua vez, levam em consideração, como o
+próprio  nome já  diz a  integração  da unidade  a ser  testada com  componentes
+externos,  como por  exemplo, bancos  de dados  ou outros  serviços  de natureza
+diversa.  Testes de  integração  são, portanto,  mais  caros do  ponto de  vista
+computacional, visto que é necessário  iniciar a aplicação para que estes possam
+ser executados. 
+
+Todos  os testes  se encontram  no  diretório {\bf  test/unit (ou  integration)}
+presente na raiz do projeto Grails. Toda vez que é criada uma classe de domínio,
+controlador  (e  outros  artefatos),  testes automaticamente  são  incluídos  no
+diretório {\bf  test/unit}.  Da mesma forma  que o GORM é  fortemente baseado no
+framework {\it hibernate}, o arcabouço de testes presente em Grails é fortemente
+baseado no {\it Junit}\footnote{\url{http://junit.org/}}.  
+
+Há três maneiras de se criar estes testes: (1) O Grails os cria automaticamente;
+(2) A classe de teste é criada manualmente pelos desenvolvedores; e (3) A classe
+de teste é criada usando o comando {\bf grails create-unit-test}.
+\index{Comando!grails create-unit-test}
+
+Assim  como diversos aspectos  do Grails,  aqui é  necessário ater-se  à algumas
+convenções.   Toda classe  de teste  possui o  sufixo {\bf  Tests} em  seu nome.
+Sendo  assim, os  testes  unitários para  a  classe de  domínio {\bf  Usuario}},
+por exemplo, ficariam em {\bf test/unit/UsuarioTests.groovy}.
+
+O comando {\bf grails  create-unit-test} ou {\bf grails create-integration-test}
+deve receber  o nome do  teste unitário  ou de integração  a ser gerado.   Não é
+necessário  incluir  o  {\bf  Tests}  no  final  do  arquivo,  Grails  o  inclui
+automaticamente.  
+\index{Comando!grails create-integration-test}
+
+\vspace{0.5cm}
+\noindent {\bf Testando  classes de domínio.} Ao lidar  com linguagens dinâmicas
+como Groovy  é frequente a  necessidade de lidar  com o seguinte  problema: como
+testar uma classe que contém métodos e atributos que só serão injetados em tempo
+de execução?  Funções  como {\bf save()}, {\bf validate()}  ou {\bf constraints}
+só funcionam após injetados pelo framework.
+
+Uma possibilidade é  escrever testes de integração. O problema  é que leva tempo
+até  a  aplicação  ser  iniciada  --  o que  provavelmente  irá  reduzir  a  sua
+produtividade. O ideal é executar testes unitários, que por sua própria natureza
+são ordens de magnitude mais rápidas. A solução para o problema é usar {\it mock
+  objects}.
+
+\vspace{0.2cm}
+
+Para ilustrar, tenha como base esta classe de domínio:
+
+\lstset{language=Java}
+\begin{lstlisting}[frame=single,            captionpos=b,            float=htbp,
+    basicstyle=\fontsize{8}{9}\selectfont, showstringspaces=false] 
+class Usuario {
+  String nome
+  String login
+  static constraints = {
+   nome(nullable:false, blank:false, maxSize:128, unique:true)
+   login(nullable:false, blank:false, maxSize:16, unique:true)
+  }
+}
+\end{lstlisting}
+
+O teste unitário encontra-se na classe a seguir:
+
+\lstset{language=Java}
+\begin{lstlisting}[frame=single,            captionpos=b,            float=htbp,
+    basicstyle=\fontsize{8}{9}\selectfont, showstringspaces=false]
+import grails.test.*
+class UsuarioTests extends GrailsUnitTestCase {
+  protected void setUp() { super.setUp() }
+  protected void tearDown() { super.tearDown() }
+  void testConstraints() {
+    mockDomain Usuario
+    def usuario = new Usuario()
+    assertFalse usuario.validate() // usuario nao validado pois
+                                   // nao incluiu campos obrigatorios
+    def usuarioOK = new Usuario(nome:"Maria", login: "maria")
+    assertTrue usuarioOK.validate()
+  }
+}
+\end{lstlisting}
+
+Vale a pena salientar o seguinte  ponto: mesmo se tratando de um teste unitário,
+o teste exercita  métodos que só existem  em tempo de execução: no  caso, o {\bf
+  validate}.  Para  isto, foi  utilizado o método  {\bf mockDomain},  herdado de
+{\bf GrailsUnitTestCase}. Este injeta na  classe de domínio todos os métodos que
+uma classe  deste tipo deve ter –  como exemplos, os métodos  de validação, {\bf
+  save()}, {\bf delete()}, etc. Assim é possível testar facilmente a validação.
+
+No caso  de testes  de integração,  obviamente você não  precisa do  método {\bf
+  mockDomain}, pois as classes já estão prontas.
+
+\vspace{0.5cm}
+\noindent {\bf Testes unitários  para controladores.} É muito comum encontrarmos
+projetos nos  quais apenas  classes de domínio  são testadas.  Para  testar seus
+controladores, você deve criar um  teste tal como faria normalmente. A diferença
+é que  este teste não  estenderá a classe  {\bf GrailsUnitTestCase}, e  sim {\bf
+  ControllerUnitTestCase}. 
+
+\vspace{0.5cm}
+\noindent {\bf  Executando os  testes.} Com a  aplicação funcionando,  o próximo
+passo é  executar seus testes.   Para isto, deve-se  usar o comando  {\bf grails
+  test-app}, que executará todos os seus testes.
+\index{Comando!grails test-app} 
+
+Para executar  apenas alguns  testes, basta passar  como parâmetro os  nomes dos
+testes  excluindo  o sufixo  {\bf  Tests},  como  exemplo {\bf  grails  test-app
+  Usuario}.
+
+Para executar apenas testes unitários, execute {\bf grails test-app unit} e para
+executar  apenas   os  testes  de  integração,  execute   {\bf  grails  test-app
+  integration}.
+
+Executados os seus testes, será  criado o diretório {\bf target/test-reports} em
+seu projeto, contendo o relatório de execução dos testes.
+
+\section{Estudos complementares}
+
+\vspace{0.5cm}
+
+Para  estudos complementares  sobre o  framework Grails  que foi  abordado nesse
+material, o leitor interessado pode consultar as seguintes referências:
+
+\begin{itemize}
+
+\vspace{0.5cm}
+
+\item  {BROWN, J.S.; ROCHER,  G. \emph{The  Definitive Guide  to Grails  2}. New
+  York, USA: Apress, 2013.} 
+
+\vspace{0.5cm}
+
+\item  {SMITH, G.;  LEDBROOK, P.  \emph{Grails in  Action}. Greenwich,  CT, USA:
+  Manning Publications Co., 2009.} 
+
+\vspace{0.5cm}
+
+\item {JUDD, C.M.; NUSAIRAT, J.F.;  SHINGLER, J. \emph{Groovy and Grails -- From
+    Novice to Professional}. New York, USA: Apress, 2008.}  
+
+\vspace{0.5cm}
+
+\item  {K{\"O}ENIG, D.  et  al.  \emph{Groovy in  Action}.  Greenwich, CT,  USA:
+  Manning Publications Co., 2007.}
+
+\vspace{0.5cm}
+
+\item  {VISHAL, L.;  JUDD,  C.M; NUSAIRAT,  J.F.;  SHINGLER, J.  \emph{Beginning
+    Groovy, Grails and Griffon}. New York, USA: Apress, 2013.}
+
+\end{itemize}

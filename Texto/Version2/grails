@@ -1,0 +1,280 @@
+===============================================================================
+CAPÍTULO 1 
+===============================================================================
+
+Página 6
+
+Atualizar versão Java => 1.8.0_74
+
+Página 7
+
+Atualizar versão Grails => 3.1.4
+
+Página 8
+
+Verificar IDE
+
+=================================================================================
+CAPÍTULO 2 
+=================================================================================
+
+Página 11
+
+Rever Figura 2.1
+
+Página 12
+
+src/java e src/groovy => src/main/groovy
+test/unit => src/test/groovy
+test/integration => src/integration-test/groovy
+web-app => src/main/webapp
+lib => não tem mais
+
+Página 13
+
+O  arquivo BuildConfig.groovy  não existe  mais. O  arquivo para  a  inserção de
+dependências de plugins é o arquivo build.gradle 
+
+compile "org.grails.plugins:br-validation:0.3"
+runtime "org.postgresql:postgresql:9.3-1101-jdbc41"
+
+Inserir o código do arquivo (Código 2.1)
+
+Página 14
+
+O arquivo  Datasource.groovy não existe mais.  O arquivo para  a configuração do
+banco de dados é o arquivo grails-app/conf/application.yml
+
+Inserir o código do arquivo (Código 2.2)
+
+Página 16
+
+Rever Figura 2.3
+
+Páginas 18 a 30
+
+Sincronizar Códigos 2.4 a 2.17
+
+Página 31
+
+Rever Figura 2.5
+
+Página 32
+
+Rever Figura 2.6
+
+Página 33
+
+Rever Figura 2.7
+
+Página 35
+
+Verificar o Código 2.19
+
+Página 36
+
+Verificar o Código 2.20
+
+Página 37
+
+O arquivo BootStrap.groovy encontra-se em grails-app/init
+Lembrar de substituir o comando "print" para "println"
+
+Inserir os códigos do arquivo (Código 2.21 a 2.25)
+
+Página 41
+
+Rever Figura 2.9
+
+Página 42
+
+Rever Figuras 2.10 e 2.11
+
+Página 43
+
+Rever Figura 2.12
+
+================================================================================
+CAPÍTULO 3 
+================================================================================
+
+Página 46
+
+Cópia de arquivos:
+
+* jquery-1.8.3.min.js   (não   precisa   o   grails   já   utiliza   o   arquivo
+  jquery-2.2.0.min.js) e jquery.maskedinput.min.js.
+
+* O diretório a ser copiado é grails-app/assets/javascripts
+
+O  arquivo BuildConfig.groovy  não existe  mais. O  arquivo para  a  inserção de
+dependências de plugins é o arquivo build.gradle
+
+compile "org.grails.plugins:spring-security-core:3.0.4"
+
+Inserir o código do arquivo (Código 3.1)
+
+Página 47
+
+O  arquivo  Config.groovy  não  existe  mais.  O  arquivo  para  a  inserção  de
+configurações é o arquivo grails-app/conf/application.groovy
+
+inserir a seguinte configuração:
+
+grails.plugin.springsecurity.logout.postOnly = false
+
+Página 50
+
+Templates agora no diretório src/main/templates
+
+Página 52
+
+Verificar o código do template Controller.groovy (Código 3.3)
+
+Página 53
+
+Verificar o código do arquivo de template create.gsp (Código 3.4) e inserir 
+ 
+<asset:javascript src="jquery-2.2.0.min.js" />
+<asset:javascript src="jquery.maskedinput.min.js" />
+<g:javascript>
+ var JQuery = jQuery.noConflict()
+ JQuery(document).ready(function(){
+   JQuery("#CPF").mask("999.999.999-99");
+   JQuery("#CNPJ").mask("99.999.999/9999-99");
+   JQuery("#CEP").mask("99999-999");
+ });
+</g:javascript>
+
+Página 55 
+
+Verificar o  código do arquivo de  template index.gsp (Código  3.5) e substituir
+${domain.propertyName} por ${propertyName} 
+
+Página 56 
+
+Verificar o  código do  arquivo de template  show.gsp (Código 3.6)  e substituir
+${domain.propertyName} por ${propertyName} 
+
+Página 58
+
+Sincronizar com os códigos de conta/index.gsp
+
+Página 60 (parei aqui)
+
+Sincronizar com os códigos de cliente/index.gsp
+
+O          arquivo           URLMappings.groovy          encontra-se          em
+grails-app/controllers/controlebancario.
+
+Página 64
+
+Não é necessário a cópia do arquivo Controle.png
+
+Alterar o arquivo grails-app/views/layouts/main.gsp (com as alterações presentes
+no código fonte) [Código 3.18]
+
+Verificar o arquivo main.css (Código 3.19)
+
+Página 65
+
+O arquivo BootStrap.groovy encontra-se em grails-app/init
+Lembrar de substituir o comando "print" para "println"
+
+Inserir os códigos do arquivo (Código 3.20 a 3.24)
+
+Página 70
+
+Rever Figura 3.5
+
+
+================================================================================
+CAPÍTULO 4 
+================================================================================
+
+Página 72
+
+O  arquivo BuildConfig.groovy  não existe  mais. O  arquivo para  a  inserção de
+dependências de plugins é o arquivo build.gradle
+
+Coloque compile 'org.grails:grails-datastore-rest-client:5.0.0.RC2
+no lugar de compile ":rest:0.8"
+
+Inserir o código do arquivo (Código 4.1)
+
+Página 73
+
+Verificar o código 4.2
+
+Página 74
+
+Verificar os códigos 4.3 e 4.4
+
+Página 75
+
+Verificar o código 4.5
+
+Página 76
+
+Verificar o código 4.6
+
+Página 77
+
+Verificar os códigos 4.7 e 4.8
+
+Página 78
+
+Verificar o código 4.9
+
+Página 79
+
+Verificar o código 4.10
+
+Página 80
+
+Não há mais transacao/_form.gsp
+
+Reescrever seção
+
+Sincronizar com os códigos de transacao/create.gsp e transacao/edit.gsp
+
+Página 81
+
+Rever Figuras 4.1 e 4.2
+
+Página 82
+
+Não há mais contaCorrente/_form.gsp
+Não há mais contaPoupanca/_form.gsp
+
+Reescrever seção
+
+Sincronizar com o código do contaCorrente/create.gsp e contaCorrente/edit.gsp
+Sincronizar com o código do contaPoupança/create.gsp e contaPoupanca/edit.gsp
+
+Página 83
+
+Verificar os códigos 4.12 e 4.13
+
+Página 84
+
+Verificar o código 4.14
+
+Página 85
+
+Verificar 1o parágrafo da seção 4.4.4
+
+Não há mais contaCliente/_form.gsp
+
+Reescrever seção
+
+Sincronizar com o código do contaCliente/create.gsp e contaCliente/edit.gsp
+
+Páginas 87 a 89
+
+Sincronizar com os códigos da seção
+
+Reescrever a seção completa
+
+
+

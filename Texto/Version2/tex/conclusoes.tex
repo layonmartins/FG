@@ -1,0 +1,494 @@
+\chapter{Considerações finais}\label{conclusoes}
+
+Este  material  apresentou as  principais  funcionalidades  do framework  Grails
+através da  descrição dos aspectos relacionados ao  desenvolvimento da aplicação
+{\bf ControleBancario}.
+
+\vspace{0.2cm}
+\noindent Para finalizar esse material, esse capítulo apresenta o {\it overview}
+de mais algumas funcionalidades presentes  em Grails que não foram abordadas nos
+capítulos anteriores.
+
+\section{Serviços Web}\index{Serviços Web}
+
+\vspace{0.5cm}
+
+Serviços web consistem  em fornecer uma API  web para a sua aplicação  web e são
+geralmente implementados utilizando REST.
+
+\subsection{REST}\index{Serviços Web!REST}
+
+\vspace{0.5cm}
+
+REST  não é  uma tecnologia  em si,  pode ser  considerada mais  como  um padrão
+arquitetural. REST é muito simples e envolve apenas o uso simples de XML ou JSON
+como meio de  comunicação, em conjunto com padrões na definição  de URLs que são
+``representações'' do sistema subjacente, e  métodos HTTP, como GET, PUT, POST e
+DELETE.
+
+\vspace{0.2cm}
+
+Cada método HTTP é  mapeado para um tipo de ação do  controlador. Por exemplo, o
+método GET é mapeado para operações  de recuperação, o método PUT é mapeado para
+operações de criação, o método POST é mapeado para operações de atualização e
+assim por diante. Neste sentido REST  se encaixa muito bem com as operações CRUD
+({\it Create}, {\it Read}, {\it Update} e {\it Delete}).
+
+\vspace{0.2cm}
+
+A abordagem mais fácil  para criar uma API REST em Grails  é expor uma classe de
+domínio  como  um recurso  REST.   Isto  pode ser  feito  através  da adição  da
+transformação   {\bf  grails.rest.Resource}   a  qualquer   classe   de  domínio
+(Código~\ref{codREST}). 
+
+\vspace{0.2cm}
+
+Ao adicionar a transformação {\bf grails.rest.Resource} e especificar uma URI, a
+classe de  domínio estará  automaticamente disponível como  um recurso  REST nos
+formatos  XML ou  JSON.  Além  disso, a  transformação  registrará o  mapeamento
+necessário   e    criará   um   controlador   (no   caso    do   exemplo,   {\bf
+  LivroController}). Por  fim, é possível  alterar o padrão de  retorno (formato
+JSON  ao  invés  do  formato  XML)  ao  definir  os  atributos  de  formatos  na
+transformação {\bf grails.rest.Resource}.
+
+\begin{lstlisting}[caption=Classe de domínio -- recurso REST, frame = trBL,
+    float=htbp, label=codREST] 
+
+import grails.rest.*
+
+@Resource(uri='/livros', formats=['json', 'xml'])
+class Livro {
+
+    String titulo
+
+    static constraints = {
+        titulo blank:false
+    }
+}
+\end{lstlisting}
+
+Dessa forma, quando acessando a URL \url{http://localhost:8080/livros}, definida
+no  atributo  {\bf  uri}   da  transformação  {\bf  grails.rest.Resource},  iria
+renderizar uma resposta  para o acesso ao  recurso REST -- a lista  de livros no
+formato JSON: 
+
+\vspace{0.5cm}
+
+\begin{cBox}
+\begin{scriptsize}
+\begin{verbatim}
+[{"id":1,"titulo":"The Definitive Guide to Grails"},{"id":2,"titulo":"Grails in Action"}]
+\end{verbatim}
+\end{scriptsize}
+\end{cBox}
+
+\vspace{0.5cm}
+
+Caso a  URL fosse \url{http://localhost:8080/livros.xml}, a resposta  seria -- a
+lista de livros no formato XML:
+
+\vspace{0.5cm}
+
+\begin{cBox}
+\begin{scriptsize}
+\begin{verbatim}
+<list>
+  <livro id="1">
+    <titulo>The Definitive Guide to Grails</titulo>
+  </livro>
+  <livro id="2">
+    <titulo>Grails in Action</titulo>
+  </livro>
+</list>
+\end{verbatim}
+\end{scriptsize}
+\end{cBox}
+
+\vspace{0.5cm}
+
+Para  maiores  informações  sobre   serviços  web  REST,  consulte  o  endereço:
+{\footnotesize\url{https://grails.github.io/grails-doc/latest/guide/webServices.html}}.
+
+\section{Automação de testes}
+
+\vspace{0.5cm}
+
+Essa seção apresenta algumas características de Grails que facilitam a automação
+de  testes. Relembrando:  testes automatizados  te dão  segurança no  momento da
+manutenção. No entanto, antes do início da discussão sobre tais características,
+é fundamental relembrar  a diferença entre testes unitários  e de integração (ou
+integrados). Para melhor explicar esses dois conceitos, utilizaremos a definição
+presente no livro de Weissmann~\cite{wei15}: 
+
+\vspace{0.2cm}
+
+\begin{cBox}
+{\it Grails nos  fornece por padrão dois tipos de  testes: unitário e integrado.
+  O objetivo do teste unitário é  nos fornecer o ferramental necessário para que
+  possamos verificar o  funcionamento de uma funcionalidade de  modo isolado, ou
+  seja, sem que precisemos iniciar todo o sistema para isto.} 
+
+\vspace{0.2cm}
+
+{\it Isso nos  permite focar apenas na lógica  que estamos implementando naquele
+  trecho do  sistema, mas por outro  lado, dado que  sempre precisamos interagir
+  com outros  componentes arquiteturais, por exemplo, a  camada de persistência,
+  um novo  problema surge. Como fazê-lo?  A resposta é  simples: criando versões
+  falsas dos mesmos (os mocks). (...)}
+
+\vspace{0.2cm}
+
+{\it Testes unitários  nos fornecem, portanto, dependências do  nosso código que
+  funcionam  em ``condições  ideais de  temperatura e  pressão'', ou  seja, elas
+  funcionam exatamente  como gostaríamos,  o que pode  ser um problema,  mas nos
+  ajuda a focar melhor naquilo que desejamos verificar.}
+
+\vspace{0.2cm}
+ 
+{\it Já testes integrados resolvem o problema da ``condição ideal de temperatura
+  e pressão'' ao nos disponibilizar o sistema completo. Você não precisa mais de
+  mocks, pois estará  usando o próprio sistema para  isso. São fundamentais para
+  que vejamos  qual será  o comportamento do  sistema quando for  para produção,
+  fornecendo-nos um ambiente que é o mais similar possível a este.}
+
+\vspace{0.2cm}
+
+\noindent ({WEISSMANN, H.~L. \emph{Falando  de Grails -- Altíssima produtividade
+    no desenvolvimento web}. São Paulo: Casa do Código, 2015.)} 
+\end{cBox}
+
+\vspace{0.5cm}
+
+Todos   os  testes   se  encontram   no  diretório   {\bf   src/test/groovy  (ou
+  src/integration-test/groovy)} presente na raiz do projeto Grails. Toda vez que
+é  criada  uma classe  de  domínio,  controlador  (e outros  artefatos),  testes
+automaticamente são incluídos no diretório em desses diretórios.  Da mesma forma
+que o  GORM é fortemente  baseado no framework  {\it hibernate}, o  arcabouço de
+testes    presente     em    Grails    é    fortemente     baseado    no    {\it
+  Spock}\footnote{~\url{https://code.google.com/archive/p/spock}}.  
+
+\vspace{0.5cm}
+
+Há três maneiras de se criar estes testes: (1) O Grails os cria automaticamente;
+(2) A classe de teste é criada manualmente pelos desenvolvedores; e (3) A classe
+de teste é criada usando o comando {\bf grails create-unit-test}.
+\index{Comando!grails create-unit-test}
+
+\vspace{0.5cm}
+
+Assim  como diversos aspectos  do Grails,  aqui é  necessário ater-se  à algumas
+convenções.  Toda classe de teste possui  o sufixo {\bf Spec} em seu nome. Sendo
+assim, os testes unitários para a classe de domínio {\bf Usuario}}, por exemplo,
+  ficariam em {\bf src/test/groovy/UsuarioSpec.groovy}. 
+
+\vspace{0.5cm}
+
+O comando {\bf grails  create-unit-test} ou {\bf grails create-integration-test}
+deve receber  o nome do  teste unitário  ou de integração  a ser gerado.   Não é
+necessário  incluir  o  {\bf  Spec}   no  final  do  arquivo,  Grails  o  inclui
+automaticamente.  
+\index{Comando!grails create-integration-test}
+
+\subsection{Grails: TDD e BDD}
+
+\vspace{0.5cm}
+
+Grails prega a  automação dos testes unitários e  de integração, conscientizando
+os desenvolvedores de  sua importância e dá suporte pleno  à adoção das técnicas
+de teste de software {\it Test-Driven Development (TDD)} e {\it Behaviour-Driven
+  Development (BDD)}. 
+
+\vspace{0.2cm}
+
+{\it   Test-Driven   Development}   faz    parte   dos   princípios   ágeis   de
+desenvolvimento. Tal técnica foi criada por Kent Beck que impulsionou a ideia de
+escrever testes automatizados antes da implementação do código~\cite{Beck12}.
+
+\vspace{0.2cm}
+
+A prática do {\it Test Driven  Development (TDD)} pode ser resumida de uma forma
+bastante rudimentar  em uma frase:  escreva seus testes  antes do código.   É na
+realidade  a aplicação  de um  modelo de  desenvolvimento baseado  em  rápidos e
+pequenos ciclos~\cite{wei15}.  
+
+\vspace{0.2cm}
+
+{\it Test Driven Development (TDD)}  é um processo de desenvolvimento iterativo,
+no  qual cada  iteração é  feita com  a escrita  de um  teste que  faz  parte da
+especificação do  que será implementado.  Todas as  iterações são caracterizadas
+por não  serem longas e propiciarem um  rápido feedback sobre o  código que esta
+sendo  desenvolvido.  O  início  do   desenvolvimento  com  {\it  TDD}  é  feito
+definindo-se uma  meta, ao contrário de  definir o código  que será implementado
+para resolver determinado problema~\cite{joha12}. 
+
+\vspace{0.2cm}
+
+{\it Behaviour-Driven  Development (BDD)}  é uma técnica  ágil~\cite{North06}, e
+uma evolução do  {\it Test-Driven Development (TDD)}, como  uma junção de outras
+técnicas ágeis existentes que são úteis para o desenvolvimento de software, cujo
+destaque para  sua utilidade se  deve à redução  dos custos com  modificações no
+software  e  funções  do comportamento.   O  {\it  BDD}  como uma  técnica  ágil
+incentiva  a   participação  e  a  colaboração   de  todos  os   membros  de  um
+projeto~\cite{LMP10}. Ao  longo dos anos,  {\it BDD} progrediu para  um processo
+que abrange análise  de requisitos e desenvolvimento do  código.  
+
+\vspace{0.2cm}
+
+Tal prática  de teste faz uso da  linguagem narrativa em junção  com a linguagem
+ubíqua,  para  a  escrita  de  casos   de  testes  e  favorece  a  definição  do
+comportamento  do sistema,  a linguagem  que  se aplica  ao BDD  é retirada  dos
+cenários  criados durante  a fase  de análise  ou levantamento  de  requisitos e
+permite uma comunicação entre todos os membros da equipe.
+
+
+\subsection{BDD: um exemplo prático}
+
+\vspace{0.5cm}
+
+Nessa  seção apresentaremos  um  exemplo  simples da  utilização  do {\it  BDD},
+através da ferramenta de testes {\it Spock}, na automação de testes. 
+
+\vspace{0.2cm}
+
+Ao adotarmos  o {\it BDD},  a nomenclatura dos  termos devem ser  enfatizados --
+serão adotados os termos ``comportamento'' ({\it behaviour}) e ``especificação''
+ao invés  de testes.  Para maiores  detalhes sobre o  porquê dessa nomenclatura,
+consulte o artigo original sobre {\it Behaviour-Driven Development (BDD)} de Dan
+North~\cite{North06}.  
+
+\vspace{0.2cm}
+
+Dessa forma, no jargão da ferramenta  de testes Spock, não temos testes, mas sim
+comportamentos  -- sendo  um conjunto  de comportamentos,  considerado  como uma
+especificação (arquivo {\bf XSpec.groovy}).  
+
+\vspace{0.2cm}
+
+O {\it BDD} incentiva os desenvolvedores  a escreverem testes cujo nome não seja
+uma função ``usual'' tal como {\bf testCriarEndereco}, mas sim frases que possam
+ser  compreendidas,  além  de  pelos  desenvolvedores,  também  pela  equipe  de
+negócio.  
+
+\vspace{0.2cm}
+
+Figura~\ref{EndBehaFig} apresenta um dos comportamentos presente no arquivo {\bf
+  EnderecoControllerSpec.groovy}.  Esse comportamento  testa a funcionalidade de
+criação de instâncias da classe de domínio {\bf Endereco} -- ação {\bf create()}
+do controlador {\bf EnderecoController}.  
+
+\vspace{0.2cm}
+
+\begin{figure}[htbp]
+\begin{mdframed}
+\begin{footnotesize}
+\begin{verbatim}
+@TestFor(EnderecoController)
+@Mock(Endereco)
+class AgenciaControllerSpec extends Specification {
+
+// Demais comportamentos dessa especificação
+
+  void "Test the create action returns the correct model"() {
+      when:"The create action is executed"
+           controller.create()
+
+      then:"The model is correctly created"
+           model.endereco!= null
+  }
+}
+\end{verbatim}
+\end{footnotesize}
+\end{mdframed}
+\caption{Especificação de testes para o controlador EnderecoController}
+\label{EndBehaFig}
+\end{figure}
+
+As palavras  reservadas {\bf  when:} e {\bf  then:} demarcam blocos  de iteração
+usados pela  ferramentas de  testes Spock. O  primeiro, {\bf when:}  (quando), é
+usado  para  definir  as  condições  em  cima das  quais  deve-se  verificar  um
+comportamento. É normalmente onde estão  definidas as variáveis que serão usadas
+na verificação. Conforme  descrito na Figura~\ref{EndBehaFig}, é o  bloco em que
+será checado  como o código  se comportará ao  criar uma instância da  classe de
+domínio {\bf Endereco}.  
+
+\vspace{0.2cm}
+
+O próximo bloco, {\bf then:} , demarca aquilo que deve-se verificar. Neste caso,
+deve  ser  escrita  uma  expressão  booleana  por linha.  Voltando  ao  caso  da
+Figura~\ref{EndBehaFig}, deseja-se se certificar de que a instância da classe de
+domínio {\bf Endereco} foi criada e não é nula.
+
+\vspace{0.2cm}
+
+Por fim,  é importante mencionar  que a especificação  {\bf EnderecoController},
+através da anotação  {\bf @Mock}, obtém um {\it mock} da  classe de domínio {\bf
+  Endereco} --  uma versão do  GORM feita especificamente para  testes unitários
+que funciona inteiramente em memória.
+
+\subsubsection{Escrevendo testes unitários para controladores}
+
+\vspace{0.5cm}
+
+Nessa  seção, vamos abordar  um simples  controlador hipotético  denominado {\bf
+  TestController} no qual será simulado  as operações mais usuais na codificação
+desse tipo de controlador.
+
+\vspace{0.3cm}
+
+\noindent {\bf Renderização de texto:}  Vamos começar pela situação mais simples
+possível: uma ação  que renderiza um texto simples. Para  tal, imagine que nosso
+controlador  possua uma  ação chamada  {\bf  index} cuja  implementação vemos  a
+seguir: 
+
+\begin{mdframed}
+\begin{footnotesize}
+\begin{verbatim}
+def index() {
+   render "Olá Mundo !"
+}
+\end{verbatim}
+\end{footnotesize}
+\end{mdframed}
+
+\vspace{0.2cm}
+
+Essa funcionalidade poderia ser testada pelo comportamento abaixo:
+
+\vspace{0.2cm}
+
+\begin{mdframed}
+\begin{footnotesize}
+\begin{verbatim}
+void "testando a ação index"() {
+    when:
+      controller.index()
+    then:
+      response.text == "Olá Mundo !"
+}
+\end{verbatim}
+\end{footnotesize}
+\end{mdframed}
+
+\vspace{0.3cm}
+
+\noindent {\bf  Renderização de  GSP:} Outra  ação comum de  um controlador  é a
+renderização  de  uma página  GSP.   Novamente,  algo  bastante simples  de  ser
+verificado. Imagine a ação a seguir: 
+
+\vspace{0.2cm}
+
+\begin{mdframed}
+\begin{footnotesize}
+\begin{verbatim}
+def renderGSP() {
+   render view: 'renderGSP', model: [titulo: "Grails in Action"]
+}
+\end{verbatim}
+\end{footnotesize}
+\end{mdframed}
+
+\vspace{0.2cm}
+
+Essa  funcionalidade  poderia ser  testada  pelo  comportamento  abaixo. Não  se
+verifica  apenas se  a página  correta foi  usada, mas  também se  o modelo  é o
+esperado. 
+
+\vspace{0.2cm}
+
+\begin{mdframed}
+\begin{footnotesize}
+\begin{verbatim}
+void "testando a ação renderGSP"() {
+    when:
+      controller.renderGSP()
+    then: "o modelo deve ter a chave titulo"
+      model.titulo == "Grails in Action"
+      view == "/test/renderGSP"
+}
+\end{verbatim}
+\end{footnotesize}
+\end{mdframed}
+
+\newpage
+
+\noindent {\bf Testando redirecionamento}: Outra  ação comum de um controlador é
+redirecionar  para outra  ação ou  controlador. Analogamente,  é simples  de ser
+verificado.  Imagine a ação a seguir:
+
+\vspace{0.2cm}
+
+\begin{mdframed}
+\begin{footnotesize}
+\begin{verbatim}
+def redirect(String papel){
+   if (papel == "ROLE_ADMIN")
+       redirect(controller:"admin")
+   else
+       redirect(controller: "cliente")
+}
+\end{verbatim}
+\end{footnotesize}
+\end{mdframed}
+
+\vspace{0.2cm}
+
+Essa  funcionalidade  poderia ser  testada  pelos  2  comportamentos abaixo  que
+invocam a ação {\bf redirect} do controlador passando diferentes parâmetros. 
+
+\vspace{0.2cm}
+
+\begin{mdframed}
+\begin{footnotesize}
+\begin{verbatim}
+void "testando a ação redirect - papel ROLE_ADMIN"() {
+    when:
+      controller.redirect("ROLE_ADMIN")
+    then:
+      response.redirectedUrl == "/admin"
+}
+
+void "testando a ação redirect - papel ROLE_CLIENTE"() {
+    when:
+      controller.redirect("ROLE_CLIENTE")
+    then:
+      response.redirectedUrl == "/cliente"
+}
+\end{verbatim}
+\end{footnotesize}
+\end{mdframed}
+
+\section{Estudos complementares}
+
+\vspace{0.5cm}
+
+Para  estudos complementares  sobre o  framework Grails  que foi  abordado nesse
+material, o leitor interessado pode consultar as seguintes referências:
+
+\begin{itemize}
+
+\vspace{0.5cm}
+
+\item  {BROWN, J.S.; ROCHER,  G. \emph{The  Definitive Guide  to Grails  2}. New
+  York, USA: Apress, 2013.} 
+
+\vspace{0.5cm}
+
+\item  {SMITH, G.;  LEDBROOK, P.  \emph{Grails in  Action}. Greenwich,  CT, USA:
+  Manning Publications Co., 2009.} 
+
+\vspace{0.5cm}
+
+\item {JUDD, C.M.; NUSAIRAT, J.F.;  SHINGLER, J. \emph{Groovy and Grails -- From
+    Novice to Professional}. New York, USA: Apress, 2008.}  
+
+\vspace{0.5cm}
+
+\item  {K{\"O}ENIG, D.  et  al.  \emph{Groovy in  Action}.  Greenwich, CT,  USA:
+  Manning Publications Co., 2007.}
+
+\vspace{0.5cm}
+
+\item  {VISHAL, L.;  JUDD,  C.M; NUSAIRAT,  J.F.;  SHINGLER, J.  \emph{Beginning
+    Groovy, Grails and Griffon}. New York, USA: Apress, 2013.}
+
+\end{itemize}

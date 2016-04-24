@@ -1,0 +1,247 @@
+\section{Alterações nas visões}
+
+\subsection{cliente - form.gsp}
+
+ Remover os campos accountExpired, accountLocked, enabled, passwordExpired em form.gsp
+
+\begin{lstlisting}[caption=clientefisico form.gsp,
+    frame = trBL,float=htbp, label=codClienteFisicoForm]
+<%@ page import="br.ufscar.dc.dsw.ClienteFisico" %>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'username', 'error')} required">
+   <label for="username">
+    <g:message code="clienteFisico.username.label" default="Username" />
+    <span class="required-indicator">*</span>
+   </label>
+   <g:textField name="username" required="" value="${clienteFisicoInstance?.username}"/>
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'password', 'error')} required">
+   <label for="password">
+    <g:message code="clienteFisico.password.label" default="Password" />
+    <span class="required-indicator">*</span>
+   </label>
+   <g:field type="password" name="password" required="" value="${clienteFisicoInstance?.password}"/>
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'nome', 'error')} required">
+    <label for="nome">
+      <g:message code="clienteFisico.nome.label" default="Nome" />
+      <span class="required-indicator">*</span>
+    </label>
+    <g:textField name="nome" maxlength="30" required="" value="${clienteFisicoInstance?.nome}"/>
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'endereco', 'error')} required">
+    <label for="endereco">
+     <g:message code="clienteFisico.endereco.label" default="Endereco" />
+     <span class="required-indicator">*</span>
+    </label>
+    <g:select id="endereco" name="endereco.id" from="${br.ufscar.dc.dsw.Endereco.list()}" optionKey="id" required="" value="${clienteFisicoInstance?.endereco?.id}" class="many-to-one"/>
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'dtMoradia', 'error')} required">
+    <label for="dtMoradia">
+      <g:message code="clienteFisico.dtMoradia.label" default="Dt Moradia" />
+      <span class="required-indicator">*</span>
+    </label>
+    <g:datePicker name="dtMoradia" precision="day"  value="${clienteFisicoInstance?.dtMoradia}"  />
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'status', 'error')} required">
+    <label for="status">
+     <g:message code="clienteFisico.status.label" default="Status" />
+     <span class="required-indicator">*</span>
+    </label>
+    <g:select name="status" from="${clienteFisicoInstance.constraints.status.inList}" required="" value="${clienteFisicoInstance?.status}" valueMessagePrefix="clienteFisico.status"/>
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'rg', 'error')} required">
+    <label for="rg">
+     <g:message code="clienteFisico.rg.label" default="Rg" />
+     <span class="required-indicator">*</span>
+    </label>
+    <g:textField name="rg" maxlength="12" required="" value="${clienteFisicoInstance?.rg}"/>
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'CPF', 'error')} required">
+    <label for="CPF">
+     <g:message code="clienteFisico.CPF.label" default="CPF" />
+     <span class="required-indicator">*</span>
+    </label>
+    <g:textField name="CPF" maxlength="14" required="" value="${clienteFisicoInstance?.CPF}"/>
+</div>
+<div class="fieldcontain ${hasErrors(bean: clienteFisicoInstance, field: 'contasCliente', 'error')} ">
+    <label for="contasCliente">
+     <g:message code="clienteFisico.contasCliente.label" default="Contas Cliente" />
+    </label>
+    <ul class="one-to-many">
+     <g:each in="${clienteFisicoInstance?.contasCliente?}" var="c">
+      <li><g:link controller="contaCliente" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></li>
+     </g:each>
+     <li class="add">
+      <g:link controller="contaCliente" action="create" params="['clienteFisico.id': clienteFisicoInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'contaCliente.label', default: 'ContaCliente')])}</g:link>
+     </li>
+    </ul>
+</div>
+\end{lstlisting}
+
+\subsection{clientefisico - index.gsp}
+
+* Remover os campos username, password em index.gsp
+
+* Trocar "username" por "nome" em index.gsp
+
+\begin{lstlisting}[caption=clientefisico index.gsp,
+    frame = trBL,float=htbp, label=codClienteFisicoIndex]
+
+<%@ page import="br.ufscar.dc.dsw.ClienteFisico" %>
+<!DOCTYPE html>
+<html>
+  <head>
+   <meta name="layout" content="main">
+   <g:set var="entityName" value="${message(code: 'clienteFisico.label', default: 'ClienteFisico')}" />
+   <title><g:message code="default.list.label" args="[entityName]" /></title>
+  </head>
+  <body>
+   <a href="#list-clienteFisico" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+   <div class="nav" role="navigation">
+    <ul>
+     <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
+     <li>
+      <sec:access controller="clienteFisico" action='create'>
+       <g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
+      </sec:access>
+     </li>
+    </ul>
+   </div>
+   <div id="list-clienteFisico" class="content scaffold-list" role="main">
+    <h1><g:message code="default.list.label" args="[entityName]" /></h1>
+    <g:if test="${flash.message}">
+     <div class="message" role="status">${flash.message}</div>
+    </g:if>
+    <table>
+     <thead>
+      <tr>
+       <g:sortableColumn property="nome" title="${message(code: 'clienteFisico.nome.label', default: 'Nome')}" />
+       <th><g:message code="clienteFisico.endereco.label" default="Endereco" /></th>
+       <g:sortableColumn property="dtMoradia" title="${message(code: 'clienteFisico.dtMoradia.label', default: 'Dt Moradia')}" />
+       <g:sortableColumn property="status" title="${message(code: 'clienteFisico.status.label', default: 'Status')}" />	
+      </tr>
+     </thead>
+     <tbody>
+      <g:each in="${clienteFisicoInstanceList}" status="i" var="clienteFisicoInstance">
+       <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+        <td><g:link action="show" id="${clienteFisicoInstance.id}">${fieldValue(bean: clienteFisicoInstance, field: "nome")}</g:link></td>
+        <td>${fieldValue(bean: clienteFisicoInstance, field: "endereco")}</td>
+        <td><g:formatDate date="${clienteFisicoInstance.dtMoradia}" /></td>
+        <td>${fieldValue(bean: clienteFisicoInstance, field: "status")}</td>
+       </tr>
+      </g:each>
+     </tbody>
+    </table>
+    <div class="pagination">
+     <g:paginate total="${clienteFisicoInstanceCount ?: 0}" />
+    </div>
+   </div>
+  </body>
+</html>
+\end{lstlisting}
+
+\subsection{clientefisio - show.gsp}
+
+* Alterar show.gsp  para apresentar apenas os seguintes  campos: nome, endereco,
+dtMoradia, status, rg, CPF, contasCliente
+
+\begin{lstlisting}[caption=clientefisico show.gsp,
+    frame = trBL,float=htbp, label=codClienteFisicoShow]
+<%@ page import="br.ufscar.dc.dsw.ClienteFisico" %>
+<!DOCTYPE html>
+<html>
+  <head>
+   <meta name="layout" content="main">
+   <g:set var="entityName" value="${message(code: 'clienteFisico.label', default: 'ClienteFisico')}" />
+   <title><g:message code="default.show.label" args="[entityName]" /></title>
+  </head>
+  <body>
+   <a href="#show-clienteFisico" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+   <div class="nav" role="navigation">
+    <ul>
+     <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
+     <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+     <li> <sec:access controller="clienteFisico" action='create'>
+       <g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
+     </sec:access> </li>
+    </ul>
+   </div>
+   <div id="show-clienteFisico" class="content scaffold-show" role="main">
+    <h1><g:message code="default.show.label" args="[entityName]" /></h1>
+     <g:if test="${flash.message}">
+      <div class="message" role="status">${flash.message}</div>
+     </g:if>
+     <ol class="property-list clienteFisico">
+     <g:if test="${clienteFisicoInstance?.nome}"> <li class="fieldcontain">
+       <span id="nome-label" class="property-label"><g:message code="clienteFisico.nome.label" default="Nome" /></span>                 
+       <span class="property-value" aria-labelledby="nome-label"><g:fieldValue bean="${clienteFisicoInstance}" field="nome"/></span>                 
+     </li> </g:if>           
+     <g:if test="${clienteFisicoInstance?.endereco}"> <li class="fieldcontain">
+       <span id="endereco-label" class="property-label"><g:message code="clienteFisico.endereco.label" default="Endereco" /></span>                        
+       <span class="property-value" aria-labelledby="endereco-label"><g:link controller="endereco" action="show" id="${clienteFisicoInstance?.endereco?.id}">${clienteFisicoInstance?.endereco?.encodeAsHTML()}</g:link></span>                
+     </li> </g:if>           
+     <g:if test="${clienteFisicoInstance?.dtMoradia}"> <li class="fieldcontain">
+       <span id="dtMoradia-label" class="property-label"><g:message code="clienteFisico.dtMoradia.label" default="Dt Moradia" /></span>
+       <span class="property-value" aria-labelledby="dtMoradia-label"><g:formatDate date="${clienteFisicoInstance?.dtMoradia}" /></span>
+     </li> </g:if>
+     <g:if test="${clienteFisicoInstance?.status}"> <li class="fieldcontain">
+       <span id="status-label" class="property-label"><g:message code="clienteFisico.status.label" default="Status" /></span> 
+       <span class="property-value" aria-labelledby="status-label"><g:fieldValue bean="${clienteFisicoInstance}" field="status"/></span>
+     </li> </g:if>
+     <g:if test="${clienteFisicoInstance?.rg}"> <li class="fieldcontain">
+       <span id="rg-label" class="property-label"><g:message code="clienteFisico.rg.label" default="Rg" /></span>
+       <span class="property-value" aria-labelledby="rg-label"><g:fieldValue bean="${clienteFisicoInstance}" field="rg"/></span>
+     </li> </g:if>
+     <g:if test="${clienteFisicoInstance?.CPF}"> <li class="fieldcontain">
+       <span id="CPF-label" class="property-label"><g:message code="clienteFisico.CPF.label" default="CPF" /></span> 
+       <span class="property-value" aria-labelledby="CPF-label"><g:fieldValue bean="${clienteFisicoInstance}" field="CPF"/></span>
+     </li> </g:if>
+     <g:if test="${clienteFisicoInstance?.contasCliente}"> <li class="fieldcontain">
+       <span id="contasCliente-label" class="property-label"><g:message code="clienteFisico.contasCliente.label" default="Contas Cliente" /></span> 
+       <g:each in="${clienteFisicoInstance.contasCliente}" var="c">
+        <span class="property-value" aria-labelledby="contasCliente-label"><g:link controller="contaCliente" action="show" id="${c.id}">${c?.encodeAsHTML()}</g:link></span>
+       </g:each>
+     </li> </g:if>
+     </ol>
+     <g:form url="[resource:clienteFisicoInstance, action:'delete']" method="DELETE">
+      <fieldset class="buttons">
+       <sec:access controller="clienteFisico" action='edit'>
+        <g:link class="edit" action="edit" resource="${clienteFisicoInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+       </sec:access>
+       <sec:access controller="clienteFisico" action='delete'>
+        <g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+       </sec:access>
+      </fieldset>
+     </g:form>
+    </div>
+   </body>
+</html>
+\end{lstlisting}
+
+\begin{verbatim}
+
+====================================
+EXERCICIO: Alterar as visões de clienteJuridico
+====================================
+
+* Remover os campos accountExpired, accountLocked, enabled, passwordExpired em _form.gsp
+
+* Remover os campos username, password em index.gsp
+
+* Trocar "username" por "nome" em index.gsp
+
+* Alterar show.gsp para apresentar apenas os seguintes campos: nome, endereco, dtMoradia, status, CNPJ, contasCliente
+
+====================================
+EXERCICIO: Alterar as visões de gerente
+====================================
+
+* Remover os campos accountExpired, accountLocked, enabled, passwordExpired em _form.gsp
+
+* Remover os campos username, password em index.gsp
+
+* Trocar "username" por "nome" em index.gsp
+
+* Alterar show.gsp para apresentar apenas os seguintes campos: nome, rg, CPF, agencia
+
+\end{verbatim}

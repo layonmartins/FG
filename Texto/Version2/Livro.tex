@@ -1,0 +1,268 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The Legrand Orange Book
+% LaTeX Template
+% Version 1.2 (19/5/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Mathias Legrand (legrand.mathias@gmail.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Compiling this template:
+% This  template  uses  biber  for   its  bibliography  and  makeindex  for  its
+% index. This means  that to update the bibliography and  index in this template
+% you will need to run the following sequence of commands in the template 
+% directory: 
+%
+% 1) pdflatex main
+% 2) makeindex main.idx -s StyleInd.ist
+% 3) biber main
+% 4) pdflatex main
+%
+% This template also uses  a number of packages which may need  to be updated to
+% the newest  versions for the template  to compile. It  is strongly recommended
+% you update your LaTeX distribution if you have any compilation errors.  
+%
+% Important note:
+% Chapter heading images should have a 2:1 width:height ratio,
+% e.g. 920px width and 460px height.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%--------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%--------------------------------------------------------------------------------
+
+%  Default font size and left-justified equations
+\documentclass[11pt,fleqn]{book}   
+\usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=10pt,a4paper]{geometry}
+ 
+\usepackage{xcolor} % Required for specifying colors by name
+\definecolor{ocre}{RGB}{76,153,0} % Define the orange color used for
+                                  % highlighting throughout the book 
+
+% Font Settings
+\usepackage{avant} % Use the Avantgarde font for headings
+%\usepackage{times} % Use the Times font for headings
+\usepackage{mathptmx} 
+% Use the Adobe Times Roman as the default text font together with math symbols
+% from the Sym­bol, Chancery and Com­puter Modern fonts 
+
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[utf8]{inputenc} % Required for including letters with accents
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+
+\usepackage{url}
+\usepackage{listings}
+\usepackage{chngcntr}
+%\usepackage{hyperref}
+\counterwithout{footnote}{chapter}
+
+\usepackage{color, colortbl}
+\definecolor{Gray}{gray}{0.95}
+
+\definecolor{C1}{HTML}{F8F8F8}
+\definecolor{C2}{HTML}{FFFFCC}
+
+\def\lstlistingname{Código}
+
+\renewcommand\lstlistingname{Código}
+\renewcommand\lstlistlistingname{Lista de Códigos}
+
+\lstset{
+language = Java, % Linguagem de programação
+basicstyle = \tiny, % Tamanho da fonte do código
+%numbers = left, % Posição da numeração das linhas
+%numberstyle = \tiny\color{blue}, % Estilo da numeração de linhas
+%stepnumber = 1, % Numeração das linhas ocorre a cada quantas linhas?
+%numbersep = 5pt, % Distância entre a numeração das linhas e o código
+backgroundcolor = \color{white}, % Cor de fundo
+showspaces = false, % Exibe espaços com um sublinhado
+showstringspaces = false, % Sublinha espaços em Strings
+showtabs = false, % Exibe tabulação com um sublinhado
+frameround=fttt
+rulecolor = \color{black}, % Cor da moldura
+tabsize = 2, % Configura tabulação em x espaços
+captionpos = b, % Posição do título pode ser t (top) ou b (bottom)
+breaklines = true, % Configura quebra de linha automática
+breakatwhitespace= false, % Configura quebra de linha
+escapechar=\^,
+}
+
+% Index
+\usepackage{calc} 
+% For simpler calculation - used for spacing the index letter headings correctly
+\usepackage{makeidx} % Required to make an index
+\makeindex % Tells LaTeX to create the files required for indexing
+
+\makeatletter
+\let\my@chapter\@chapter
+\renewcommand*{\@chapter}{%
+  \addtocontents{lol}{\protect\addvspace{10pt}}%
+  \my@chapter}
+\makeatother
+
+%\tolerance=1
+%\emergencystretch=\maxdimen
+%\hyphenpenalty=10000
+%\hbadness=10000
+
+%----------------------------------------------------------------------------------------
+
+\input{tex/estrutura} 
+
+\begin{document}
+
+\sloppy
+
+\setcounter{page}{1}
+
+\pagenumbering{roman}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begingroup
+\thispagestyle{empty}
+\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background1}}} % Image background
+\centering
+\vspace*{5cm}
+\par\normalfont\fontsize{32}{32}\sffamily\selectfont
+\begin{figure}[h]
+\centering\includegraphics[scale=0.8]{logoGrails2}
+\end{figure}
+\vspace{3cm}
+Desenvolvimento Web Ágil para a plataforma Java\par % Book title
+\vspace*{4cm}
+{\Huge 
+Delano Medeiros Beder
+}\par % Author name
+
+\endgroup
+
+%-------------------------------------------------------------------------------
+%	COPYRIGHT PAGE
+%-------------------------------------------------------------------------------
+
+\newpage
+~\vfill
+\thispagestyle{empty}
+
+\noindent Copyright \copyright\ 2016 Delano Medeiros Beder\\ % Copyright notice
+
+\noindent  Esse material  está licenciado  sob a  Licença {\it  Creative Commons
+  Atribuição-NãoComercial-CompartilhaIgual  3.0 Brasil}.  Para  obter uma  cópia
+dessa                               licença,                              visite
+\url{http://creativecommons.org/licenses/by-nc-sa/3.0/br}. 
+
+\hspace{1cm}\\
+\noindent \textit{Abril 2016} % Printing/edition date
+
+%-------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%-------------------------------------------------------------------------------
+
+\chapterimage{chapter.pdf} % Table of contents heading image
+
+\pagestyle{empty} % No headers
+
+\tableofcontents % Print the table of contents itself
+
+\cleardoublepage % Forces the first chapter to start on an odd page so it's on
+                 % the right 
+
+\pagestyle{fancy} % Print headers again
+
+%-------------------------------------------------------------------------------
+%	LISTA DE CÓDIGOS
+%-------------------------------------------------------------------------------
+
+\lstlistoflistings
+
+%-------------------------------------------------------------------------------
+%	LISTA DE FIGURAS
+%-------------------------------------------------------------------------------
+
+\listoffigures
+
+%-------------------------------------------------------------------------------
+%	LISTA DE TABELAS
+%-------------------------------------------------------------------------------
+
+\listoftables
+
+%-------------------------------------------------------------------------------
+%	CAPÍTULO 1
+%-------------------------------------------------------------------------------
+
+\pagenumbering{arabic}
+
+\setcounter{page}{-1}
+
+\chapterimage{chapter.pdf} % Chapter heading image
+
+\input{tex/introducao}
+
+%-------------------------------------------------------------------------------
+%	CAPÍTULO 2
+%-------------------------------------------------------------------------------
+
+\input{tex/bancario}
+
+%-------------------------------------------------------------------------------
+%	CAPÍTULO 3
+%-------------------------------------------------------------------------------
+
+\input{tex/autenticacao}
+
+%-------------------------------------------------------------------------------
+%	CAPÍTULO 4
+%-------------------------------------------------------------------------------
+
+\input{tex/acesso}
+
+%-------------------------------------------------------------------------------
+%	CAPÍTULO 5
+%-------------------------------------------------------------------------------
+
+%\input{tex/extrato}
+
+%-------------------------------------------------------------------------------
+%	CAPÍTULO 5
+%-------------------------------------------------------------------------------
+
+\input{tex/conclusoes}
+
+%-------------------------------------------------------------------------------
+%	EXERCÍCIO
+%-------------------------------------------------------------------------------
+
+\input{tex/exercicio}
+
+%-------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%-------------------------------------------------------------------------------
+
+%\chapter*{Bibliography}
+\bibliographystyle{abnt-num}
+\bibliography{bib/EngWeb}
+
+%-------------------------------------------------------------------------------
+%	INDEX
+%-------------------------------------------------------------------------------
+
+\cleardoublepage
+\setlength{\columnsep}{0.75cm}
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Índice Remissivo}}
+\printindex
+
+%-------------------------------------------------------------------------------
+
+\end{document}

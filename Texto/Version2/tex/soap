@@ -1,0 +1,53 @@
+\section{Serviços {\it web} SOAP}\index{Serviços {\it web} SOAP}
+
+\vspace{0.5cm}
+
+Serviços {\it web} consistem em fornecer uma  API para a sua aplicação web e são
+geralmente implementados utilizando REST ou  SOAP. O acesso e a implementação de
+serviços       {\it       web}       REST       foram       discutidos       nas
+Seções~\ref{secAutoFill}~e~\ref{secWebREST}, respectivamente. 
+
+\vspace{0.5cm}
+\noindent  No contexto  da implementação  de  serviços {\it  web} SOAP,  existem
+vários {\it plugins} que adicionam  esse suporte em Grails. Entre esses, pode-se
+destacar dois: 
+
+\begin{itemize}
+
+\vspace{0.5cm}
+
+\item O {\it plugin} {\bf CXF}\footnote{\url{http://grails.org/plugin/cxf/}} que
+  utiliza                    o                    {\it                    Apache
+    CXF}\footnote{\url{http://cxf.apache.org/}}.\index{Plugins!cxf}
+
+\vspace{0.5cm}
+\item O {\it plugin} {\bf Axis2}\footnote{\url{http://grails.org/plugin/axis2}} que
+  utiliza                    o                    {\it                    Apache
+    Axis2}\footnote{\url{http://axis.apache.org/axis2/java/core/}}. 
+
+\end{itemize}
+
+\vspace{0.5cm} 
+
+A maioria das integrações Grails com SOAP é realizada através da propriedade {\bf
+  static expose}.   Por exemplo, podemos implementar, utilizando  o {\it plugin}
+{\bf CXF}, o serviço  web (Código~\ref{codAgenciaService}) que expõe as agências
+da aplicação {\bf ControleBancario} discutida nos capítulos anteriores. 
+
+\newpage
+
+\begin{lstlisting}[caption=Serviço {\it web} SOAP: {\bf AgenciaService}, frame =
+    trBL, float=htbp, label=codAgenciaService]
+package br.ufscar.dc.dsw
+
+class AgenciaService {
+    static expose = ['cxf']
+
+    Agencia[] getAgencia(String numero) {
+        def banco = Banco.findAllByNumero(params.numero)
+        def agencias = Agencia.findAllByBanco(banco)
+        agencias as Agencia[]
+    }
+}
+\end{lstlisting}
+
