@@ -1,7 +1,7 @@
 pdf::
 	pdflatex Livro 
 	makeindex Livro.idx -s style.ist
-	bibtex Livro
+	cp bib/Livro.bbl .
 	pdflatex Livro
 	pdflatex Livro
 

@@ -53,17 +53,21 @@ transformação {\bf grails.rest.Resource}.
 
 \begin{lstlisting}[caption=Classe de domínio -- recurso REST, frame = trBL,
     float=htbp, label=codREST] 
+package br.ufscar.dc.dsw
 
 import grails.rest.*
 
 @Resource(uri='/livros', formats=['json', 'xml'])
 class Livro {
 
-    String titulo
-
     static constraints = {
         titulo blank:false
+        ano min: 1900
     }
+
+    String titulo
+
+    int ano
 }
 \end{lstlisting}
 
@@ -77,7 +81,8 @@ formato JSON:
 \begin{cBox}
 \begin{scriptsize}
 \begin{verbatim}
-[{"id":1,"titulo":"The Definitive Guide to Grails"},{"id":2,"titulo":"Grails in Action"}]
+[{"id":1,"ano":2013,"titulo":"The Definitive Guide to Grails"},
+ {"id":2,"ano":2009,"titulo":"Grails in Action"}]
 \end{verbatim}
 \end{scriptsize}
 \end{cBox}
@@ -94,10 +99,12 @@ lista de livros no formato XML:
 \begin{verbatim}
 <list>
   <livro id="1">
-    <titulo>The Definitive Guide to Grails</titulo>
+     <ano>2013</ano>
+     <titulo>The Definitive Guide to Grails</titulo>
   </livro>
   <livro id="2">
-    <titulo>Grails in Action</titulo>
+     <ano>2009</ano>
+     <titulo>Grails in Action</titulo>
   </livro>
 </list>
 \end{verbatim}
@@ -285,9 +292,7 @@ do controlador {\bf EnderecoController}.
 @TestFor(EnderecoController)
 @Mock(Endereco)
 class AgenciaControllerSpec extends Specification {
-
 // Demais comportamentos dessa especificação
-
   void "Test the create action returns the correct model"() {
       when:"The create action is executed"
            controller.create()
@@ -327,18 +332,20 @@ que funciona inteiramente em memória.
 
 \subsubsection{Escrevendo testes unitários para controladores}
 
-\vspace{0.5cm}
+\vspace{0.2cm}
 
 Nessa  seção, vamos abordar  um simples  controlador hipotético  denominado {\bf
   TestController} no qual será simulado  as operações mais usuais na codificação
 desse tipo de controlador.
 
-\vspace{0.3cm}
+\vspace{0.2cm}
 
 \noindent {\bf Renderização de texto:}  Vamos começar pela situação mais simples
 possível: uma ação  que renderiza um texto simples. Para  tal, imagine que nosso
 controlador  possua uma  ação chamada  {\bf  index} cuja  implementação vemos  a
 seguir: 
+
+\vspace{0.2cm}
 
 \begin{mdframed}
 \begin{footnotesize}
@@ -350,11 +357,11 @@ def index() {
 \end{footnotesize}
 \end{mdframed}
 
-\vspace{0.2cm}
+\vspace{0.1cm}
 
 Essa funcionalidade poderia ser testada pelo comportamento abaixo:
 
-\vspace{0.2cm}
+\vspace{0.1cm}
 
 \begin{mdframed}
 \begin{footnotesize}
@@ -369,7 +376,7 @@ void "testando a ação index"() {
 \end{footnotesize}
 \end{mdframed}
 
-\vspace{0.3cm}
+\vspace{0.2cm}
 
 \noindent {\bf  Renderização de  GSP:} Outra  ação comum de  um controlador  é a
 renderização  de  uma página  GSP.   Novamente,  algo  bastante simples  de  ser
@@ -387,13 +394,13 @@ def renderGSP() {
 \end{footnotesize}
 \end{mdframed}
 
-\vspace{0.2cm}
+\vspace{0.1cm}
 
 Essa  funcionalidade  poderia ser  testada  pelo  comportamento  abaixo. Não  se
 verifica  apenas se  a página  correta foi  usada, mas  também se  o modelo  é o
 esperado. 
 
-\vspace{0.2cm}
+\vspace{0.1cm}
 
 \begin{mdframed}
 \begin{footnotesize}
@@ -457,10 +464,11 @@ void "testando a ação redirect - papel ROLE_CLIENTE"() {
 \end{footnotesize}
 \end{mdframed}
 
-%\nocite{BR13}
-%\nocite{Grails}
-%\nocite{Groovy}
-%\nocite{VJN+13}
+\nocite{BR13}
+\nocite{Grails}
+\nocite{Groovy}
+\nocite{VJN+13}
+\nocite{JNS08}
 
 \section{Estudos complementares}
 
