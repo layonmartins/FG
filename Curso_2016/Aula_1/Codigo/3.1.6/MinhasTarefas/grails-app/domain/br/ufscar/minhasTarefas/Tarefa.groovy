@@ -7,5 +7,6 @@ class Tarefa {
     static belongsTo = ['lista': ListaTarefa]
 
     static constraints = {
+        nome()
     }
 }
