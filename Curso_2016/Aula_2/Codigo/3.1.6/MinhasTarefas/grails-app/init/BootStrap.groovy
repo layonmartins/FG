@@ -7,11 +7,11 @@ import br.ufscar.minhasTarefas.seguranca.UsuarioPermissao
 class BootStrap {
 
     def init = { servletContext ->
-        criarUsuariosAutorizados()
-        criarListasComTarefas()
+        def usuarios = criarUsuariosAutorizados()
+        criarListasComTarefas(usuarios.usuarioNormal)
     }
 
-    private void criarUsuariosAutorizados() {
+    private def criarUsuariosAutorizados() {
         Permissao permissaoAdministrador = new Permissao(authority: 'ROLE_ADMIN').save(failOnError: true)
         Usuario usuarioAdministrador = new Usuario(username: 'admin', password: 'root').save(failOnError: true)
         UsuarioPermissao autorizacaoAdministrador = new UsuarioPermissao(usuario: usuarioAdministrador,
@@ -20,13 +20,15 @@ class BootStrap {
         Usuario usuarioNormal = new Usuario(username: 'usuario', password: 'normal').save(failOnError: true)
         UsuarioPermissao autorizacaoGerenciaListas = new UsuarioPermissao(usuario: usuarioNormal,
                 permissao: permissaoGerenciarListas).save(failOnError: true)
+
+        return [usuarioNormal: usuarioNormal, usuarioAdmin: usuarioAdministrador]
     }
 
-    private criarListasComTarefas() {
+    private criarListasComTarefas(Usuario usuario) {
         15.times { i ->
-            ListaTarefa listaTarefa = new ListaTarefa(nome: "Lista ${i + 1}").save(failOnError: true)
+            ListaTarefa listaTarefa = new ListaTarefa(nome: "Lista ${i + 1}", usuario: usuario).save(failOnError: true)
             3.times { j ->
-                new Tarefa(nome: "Tarefa ${j + 1}", lista: listaTarefa).save(failOnError: true)
+                new Tarefa(nome: "Tarefa ${j + 1}", lista: listaTarefa, usuario: usuario).save(failOnError: true)
             }
         }
     }
