@@ -1,5 +1,7 @@
 package br.ufscar.minhasTarefas
 
+import br.ufscar.minhasTarefas.seguranca.Usuario
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import grails.plugin.springsecurity.annotation.Secured
@@ -8,11 +10,13 @@ import grails.plugin.springsecurity.annotation.Secured
 class TarefaController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def springSecurityService
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         def idLista = params.long('idLista')
         def concluidas = params.concluidas?params.boolean('concluidas'):null
+        Usuario usuario = springSecurityService.currentUser
 
         def listaTarefas = Tarefa.withCriteria(params) {
             if (idLista != null) {
@@ -21,6 +25,7 @@ class TarefaController {
             if (concluidas != null) {
                 eq('concluida', concluidas)
             }
+            eq('usuario', usuario)
 
         }
         respond listaTarefas, model:[tarefaCount: listaTarefas.size, listasDisponiveis: ListaTarefa.all,
