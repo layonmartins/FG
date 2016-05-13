@@ -61,6 +61,7 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+    compile 'org.grails.plugins:spring-security-core:3.0.4'
 }
 
 task wrapper(type: Wrapper) {

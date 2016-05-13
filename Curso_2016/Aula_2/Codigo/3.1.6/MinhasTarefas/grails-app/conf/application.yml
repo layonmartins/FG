@@ -19,8 +19,8 @@ environments:
             dbCreate: create-drop
             url: jdbc:postgresql://localhost:5432/minhasTarefas
             driverClassName: org.postgresql.Driver
-            username: sagui
-            password: iugas
+            username: postgres
+            password: postgres
     test:
         dataSource:
             dbCreate: update
