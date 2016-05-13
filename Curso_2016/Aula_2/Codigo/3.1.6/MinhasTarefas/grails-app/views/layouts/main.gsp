@@ -32,6 +32,21 @@
             <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
                 <ul class="nav navbar-nav navbar-right">
                     <g:pageProperty name="page.nav" />
+                    <li class="dropdown">
+                        <sec:ifNotLoggedIn>
+                            <g:link controller="login">Login</g:link>
+                        </sec:ifNotLoggedIn>
+                        <sec:ifLoggedIn>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Usuário: <sec:username />
+                                <span class="caret"></span> </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <g:link controller="logout">Logout</g:link>
+                                </li>
+                            </ul>
+                        </sec:ifLoggedIn>
+                    </li>
                 </ul>
             </div>
         </div>

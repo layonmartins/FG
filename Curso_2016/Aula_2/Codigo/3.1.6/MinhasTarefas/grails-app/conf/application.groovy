@@ -26,3 +26,5 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
 
+//Permitir login com get
+grails.plugin.springsecurity.logout.postOnly = false
